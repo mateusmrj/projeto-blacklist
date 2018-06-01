@@ -24,10 +24,9 @@ class BlacklistModel
         try {
             $query = "SELECT COUNT(cpf) AS QTD FROM blacklist WHERE status = 1;";
             $stmt = $this->conn->query($query);
-            return json_encode($stmt->fetch(PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (PDOException $exc) {
-            echo $exc->getMessage();
-            return false;
+            return array("status" => "error", "content" => "Houve uma falha ao buscar a quantidade de registros na Blacklist. ". $exc->getMessage());
         }
     }
 
@@ -45,13 +44,12 @@ class BlacklistModel
 
             $has_data = $stmt->fetch(PDO::FETCH_ASSOC);
             if ($has_data) {
-                return json_encode(array('cpf' => $cpf, 'status' => 1, 'description' => 'BLOCK'), JSON_PRETTY_PRINT);
+                return array('cpf' => $cpf, 'status' => 1, 'description' => 'BLOCK');
             } else {
-                return json_encode(array('cpf' => $cpf, 'status' => 0, 'description' => 'FREE'), JSON_PRETTY_PRINT);
+                return array('cpf' => $cpf, 'status' => 0, 'description' => 'FREE');
             }
         } catch (PDOException $exc) {
-            echo $exc->getMessage();
-            return false;
+            return array("status" => "error", "content" => "Houve uma falha ao verificar o status do CPF. ". $exc->getMessage());
         }
     }
 
@@ -70,10 +68,9 @@ class BlacklistModel
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':cpf', $cpf);
             $stmt->execute();
-            return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $exc) {
-            echo $exc->getMessage();
-            return false;
+            return array("status" => "error", "content" => "Houve uma falha ao buscar o histórico do CPF. ". $exc->getMessage());
         }
     }
 
@@ -88,10 +85,9 @@ class BlacklistModel
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':cpf', $cpf);
             $stmt->execute();
-            return true;
+            return array("status" => "success", "content" => "O CPF foi removido da Blacklist.");
         } catch (PDOException $exc) {
-            echo $exc->getMessage();
-            return false;
+            return array("status" => "error", "content" => "Houve uma falha ao remover o CPF da Blacklist. ". $exc->getMessage());
         }
     }
 
@@ -106,10 +102,9 @@ class BlacklistModel
             $stmt = $this->conn->prepare($query);
             $stmt->bindParam(':cpf', $cpf);
             $stmt->execute();
-            return true;
+            return array("status" => "success", "content" => "O CPF foi adicionado à Blacklist.");
         } catch (PDOException $exc) {
-            echo $exc->getMessage();
-            return false;
+            return array("status" => "error", "content" => "Houve uma falha ao adicionar o CPF à Blacklist. ". $exc->getMessage());
         }
     }
 }
