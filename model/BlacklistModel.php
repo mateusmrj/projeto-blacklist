@@ -6,19 +6,14 @@
  * Time: 11:18 PM
  */
 
+include_once ('config/Conexao.php');
+
 class BlacklistModel
 {
-    private $conn = null;
+    private $conn;
 
-    /**
-     * BlacklistModel constructor. Sets up connection to SQLite database.
-     */
     function __construct() {
-        try {
-            $this->conn = new PDO("sqlite: db.sqlite3");
-        } catch (PDOException $exc) {
-            return $exc->getMessage();
-        }
+        $this->conn = Conexao::getInstance();
     }
 
     /**
@@ -29,9 +24,10 @@ class BlacklistModel
         try {
             $query = "SELECT COUNT(cpf) AS QTD FROM blacklist WHERE status = 1;";
             $stmt = $this->conn->query($query);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return json_encode($stmt->fetch(PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
         } catch (PDOException $exc) {
-            return $exc->getMessage();
+            echo $exc->getMessage();
+            return false;
         }
     }
 
@@ -44,17 +40,18 @@ class BlacklistModel
         try {
             $query = "SELECT * FROM blacklist WHERE cpf = :cpf AND status = 1;";
             $stmt = $this->conn->prepare($query);
-            $stmt->execute(['cpf' => $cpf]);
+            $stmt->bindParam('cpf', $cpf);
+            $stmt->execute();
 
             $has_data = $stmt->fetch(PDO::FETCH_ASSOC);
-
             if ($has_data) {
-                return json_encode(array('cpf' => $cpf, 'status' => 'BLOCK'));
+                return json_encode(array('cpf' => $cpf, 'status' => 1, 'description' => 'BLOCK'), JSON_PRETTY_PRINT);
             } else {
-                return json_encode(array('cpf' => $cpf, 'status' => 'FREE'));
+                return json_encode(array('cpf' => $cpf, 'status' => 0, 'description' => 'FREE'), JSON_PRETTY_PRINT);
             }
         } catch (PDOException $exc) {
-            return $exc->getMessage();
+            echo $exc->getMessage();
+            return false;
         }
     }
 
@@ -65,12 +62,18 @@ class BlacklistModel
      */
     function getCpfHistory($cpf = null) {
         try {
-            $query = "SELECT * FROM blacklist WHERE cpf = :cpf ORDER BY datahora_inclusao DESC";
+            $query = "SELECT cpf AS 'CPF', CASE status WHEN '0' THEN 'FREE' ELSE 'BLOCK' END AS 'Status', 
+                    datahora_inclusao AS 'Data Inclusao', datahora_alteracao AS 'Data Alteracao' 
+                    FROM blacklist 
+                    WHERE cpf = :cpf 
+                    ORDER BY datahora_inclusao DESC";
             $stmt = $this->conn->prepare($query);
-            $stmt->execute(['cpf' => $cpf]);
-            return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC));
+            $stmt->bindParam(':cpf', $cpf);
+            $stmt->execute();
+            return json_encode($stmt->fetchAll(PDO::FETCH_ASSOC), JSON_PRETTY_PRINT);
         } catch (PDOException $exc) {
-            return $exc->getMessage();
+            echo $exc->getMessage();
+            return false;
         }
     }
 
@@ -83,9 +86,12 @@ class BlacklistModel
         try {
             $query = "UPDATE blacklist SET status = 0, datahora_alteracao = datetime('now', 'localtime') WHERE cpf = :cpf AND status = 1";
             $stmt = $this->conn->prepare($query);
-            return $stmt->execute(['cpf' => $cpf]);
+            $stmt->bindParam(':cpf', $cpf);
+            $stmt->execute();
+            return true;
         } catch (PDOException $exc) {
-            return $exc->getMessage();
+            echo $exc->getMessage();
+            return false;
         }
     }
 
@@ -98,10 +104,12 @@ class BlacklistModel
         try {
             $query = "INSERT INTO blacklist (cpf, datahora_inclusao) VALUES (:cpf, datetime('now', 'localtime'));";
             $stmt = $this->conn->prepare($query);
-            $stmt->execute(['cpf' => $cpf]);
-            return $this->conn->lastInsertId();
+            $stmt->bindParam(':cpf', $cpf);
+            $stmt->execute();
+            return true;
         } catch (PDOException $exc) {
-            return $exc->getMessage();
+            echo $exc->getMessage();
+            return false;
         }
     }
 }
