@@ -1,0 +1,32 @@
+body {
+    font-family: Montserrat, Calibri, Arial, sans-serif;
+    font-size: 14px;
+}
+
+.badge {
+	width: 25px;
+	height: auto;
+	padding: 3px;
+	margin-left: 5px;
+	padding-left: 4px;
+	letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.invisible {
+	visibility: hidden;
+}
+
+.free {
+	background-color: #00b300;
+	color: #FFF;
+}
+
+.block {
+	background-color: #cc0000;
+	color: #FFF;
+}
+
+#formCpf {
+    margin: 10px 0;
+}

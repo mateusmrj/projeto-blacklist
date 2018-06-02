@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Blacklist MaxMilhas</title>
+    <script type="text/javascript" src="public/js/jquery-3.3.1.min.js"></script>
+    <script type="text/javascript" src="public/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/bootstrap.min.css"/>
+    <script type="text/javascript" src="public/js/scripts.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/style.css"/>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="container text-center col-lg-6 col-sm-10 col-lg-push-3 col-sm-push-1">
+            <h1>Blacklist de CPF MaxMilhas</h1>
+            <h3>Digite o CPF que deseja consultar:</h3>
+            <form class="form-inline" id="formCpf">
+                <div class="form-group">
+                    <label for="txtCpf" class="control-label">CPF: <input type="text" name="txtCpf" id="txtCpf" maxlength="14"
+                                                            class="cpf form-control" required="required"/></label>
+                    <span class="badge" id="badge"></span>
+                </div>
+                <div class="form-group">
+                    <button name="btnVerifica" class="btn">Verificar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        <div class="clearfix"></div>
+    <div class="row">
+        <div class="container text-center col-lg-2 col-md-4 col-sm-6 col-lg-push-5 col-md-4 col-sm-push-3">
+            <button name="block" id="blockCpf" class="btn btn-md btn-danger pull-left">Bloquear</button>
+            <button name="free" id="freeCpf" class="btn btn-md btn-success pull-right">Liberar</button>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="row">
+        <div class="container col-lg-6 col-sm-10 col-lg-push-3 col-sm-push-1">
+            <div class="alert invisible" role="alert" id="reqMessage"></div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    clearElement('badge');
+    clearElement('reqMessage');
+    setDisabled('blockCpf');
+    setDisabled('freeCpf');
+
+    function addFreeBadge(element_id) {
+        document.querySelector("#" + element_id).innerHTML = "FREE";
+        document.querySelector("#" + element_id).classList.add("free");
+        document.querySelector("#" + element_id).classList.remove("block", "invisible");
+    }
+
+    function addBlockBadge(element_id) {
+        document.querySelector("#" + element_id).innerHTML = "BLOCK";
+        document.querySelector("#" + element_id).classList.add("block");
+        document.querySelector("#" + element_id).classList.remove("free", "invisible");
+    }
+
+    function clearElement(element_id) {
+        document.querySelector("#" + element_id).innerHTML = "";
+        document.querySelector("#" + element_id).classList.remove("block", "free");
+        document.querySelector("#" + element_id).classList.add("invisible");
+    }
+
+    function setDisabled(element_id) {
+        document.querySelector("#" + element_id).disabled = true;
+    }
+
+    function setEnabled(element_id) {
+        document.querySelector("#" + element_id).disabled = false;
+    }
+</script>
+</html>
