@@ -1,0 +1,6 @@
+# files
+db/db.sqlite3
+
+# folders
+__MACOSX/
+.idea/
