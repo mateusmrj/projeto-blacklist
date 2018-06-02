@@ -6,7 +6,7 @@
  * Time: 11:18 PM
  */
 
-include_once ('config/Conexao.php');
+include_once ('../config/Conexao.php');
 
 class BlacklistModel
 {

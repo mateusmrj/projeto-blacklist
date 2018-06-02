@@ -14,13 +14,17 @@ class Conexao
     }
 
     public static function getInstance() {
-        if (!isset(self::$conn)) {
-            self::$conn = new PDO("sqlite:db/db.sqlite3");
-            self::$conn->setAttribute(PDO::ATTR_ERRMODE, 
-                        PDO::ERRMODE_EXCEPTION);
-            self::setUpDatabase();
+        try {
+            if (!isset(self::$conn)) {
+                self::$conn = new PDO("sqlite:db/db.sqlite3");
+                self::$conn->setAttribute(PDO::ATTR_ERRMODE,
+                    PDO::ERRMODE_EXCEPTION);
+                self::setUpDatabase();
+            }
+            return self::$conn;
+        } catch (PDOException $exc) {
+            throw $exc;
         }
-        return self::$conn;
     }
 
     private static function setUpDatabase() {
@@ -31,6 +35,11 @@ class Conexao
                     status CHAR(1) DEFAULT '1', 
                     datahora_inclusao DATETIME NOT NULL,
                     datahora_alteracao DATETIME NULL)");
+
+            self::$conn->exec("CREATE TABLE IF NOT EXISTS log (
+                    id INTEGER PRIMARY KEY, 
+                    acao VARCHAR(20) NOT NULL DEFAULT 'consulta',
+                    datahora_inclusao DATETIME NOT NULL)");
         } catch (PDOException $exc) {
             echo $exc->getMessage();
             return false;
