@@ -10,21 +10,57 @@ Estas instruções vão te orientar a criar um servidor virtual do projeto com D
 ### Pré-requisitos
 
 * Ter o [Docker](https://www.docker.com) instalado;
-* Ter o [Nginx](https://www.nginx.org) instalado;
+* Ter o [Git](https://git-scm.com) instalado;
+
+## Estrutura do Projeto
+
+```
+.
+projeto-blacklist
+|-- config
+    +-- Conexao.php
+|-- controller
+    +-- ServerController.php
+|-- db
+    +-- db.sqlite3
+|-- docker
+    +-- Dockerfile
+|-- model
+    +-- BlacklistModel.php
+|-- public
+    |-- css
+        +-- bootstrap.min.css
+        +-- bootstrap.min.css.map
+        +-- style.css
+    |-- js
+        +-- bootstrap.min.js
+        +-- jquery-3.3.1.min.js
+        +-- scripts.js
++-- index.php
++-- .gitignore
+```
 
 ### Instalação
+
+####No terminal, siga os passos abaixo:
 
 Clone o projeto:
 
 ```
-git clone https://github.com/sarahcjs/projeto-blacklist.git 
+git clone https://github.com/sarahcjs/projeto-blacklist.git <nome desejado>
 ```
 
-Instale as dependências:
+Crie uma imagem com o Dockerfile disponibilizado na pasta /docker:
 
 ```
-cd /caminho/para/o/server
-docker run -d -p 3000:80 --name webserver nginx
+cd /caminho/para/o/projeto/
+docker build -t <nome da imagem> docker
+```
+
+Crie e execute o container, indicando qual pasta local deverá ser compatilhada:
+
+```
+docker run --name blacklist -itd -p 3000:80 -v /caminho/para/o/projeto/:/var/www/app <nome da imagem>
 ```
 
 No navegador busque pelo CPF desejado via URL:
@@ -41,9 +77,10 @@ Ou via formulário disponível em:
 
 ## Construído com
 
-* [PHP 7.2.6](https://php.net)
+* [PHP 7.0](https://php.net)
+* [Nginx](https://www.nginx.org)
 * [Docker](https://www.docker.com/) - Ferramenta de containerização que permite criar servidores virtuais personalizados
-* [SQLite](https://www.sqlite.org) - Framework de Frontend
+* [SQLite](https://www.sqlite.org) - Banco de dados embutido
 * [Bootstrap 3](https://getbootstrap.com/docs/3.3/) - Framework de Frontend
 
 
