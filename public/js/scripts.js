@@ -34,7 +34,7 @@ function add() {
     })
     .success(function( msg ) {
         let json_msg = JSON.parse(msg);
-        if (json_msg["status"] == "error") {
+        if (json_msg.status == "error") {
             setDisabled('free');
             setDisabled('block');
             addBlockBadge('badge');
@@ -46,7 +46,7 @@ function add() {
             document.querySelector("#reqMessage").classList.add("success");
         }
 
-        document.querySelector("#reqMessage").innerHTML = json_msg["content"];
+        document.querySelector("#reqMessage").innerHTML = json_msg.content;
     });
 }
 
@@ -60,7 +60,7 @@ function remove() {
     })
     .success(function( msg ) {
         let json_msg = JSON.parse(msg);
-        if (json_msg["status"] == "error") {
+        if (json_msg.status == "error") {
             setDisabled('free');
             setDisabled('block');
             addBlockBadge('badge');
@@ -72,7 +72,7 @@ function remove() {
             document.querySelector("#reqMessage").classList.add("success");
         }
 
-        document.querySelector("#reqMessage").innerHTML = json_msg["content"];
+        document.querySelector("#reqMessage").innerHTML = json_msg.content;
     });
 }
 
@@ -87,7 +87,7 @@ function check() {
         })
             .success(function( msg ) {
                 let json_msg = JSON.parse(msg);
-                if (json_msg["status"] == "error") {
+                if (json_msg.status == "error") {
                     setDisabled('free');
                     setDisabled('block');
                     addBlockBadge('badge');
@@ -99,7 +99,7 @@ function check() {
                     document.querySelector("#reqMessage").classList.add("success");
                 }
 
-                document.querySelector("#reqMessage").innerHTML = json_msg["content"];
+                document.querySelector("#reqMessage").innerHTML = json_msg.content;
             });
     }
 }
