@@ -17,6 +17,11 @@ Estas instruções vão te orientar a criar um servidor virtual do projeto com D
 ```
 .
 projeto-blacklist
+|-- blacklist
+    +-- consulta.php
+    +-- incluir.php
+    +-- remover.php
+    +-- status.php
 |-- config
     +-- Conexao.php
 |-- controller
@@ -27,16 +32,18 @@ projeto-blacklist
     +-- Dockerfile
 |-- model
     +-- BlacklistModel.php
+    +-- LogsModel.php
 |-- public
     |-- css
         +-- bootstrap.min.css
         +-- bootstrap.min.css.map
         +-- style.css
+    +-- index.html
     |-- js
         +-- bootstrap.min.js
         +-- jquery-3.3.1.min.js
+        +-- jquery.mask.js
         +-- scripts.js
-+-- index.php
 +-- .gitignore
 ```
 
