@@ -1,0 +1,41 @@
+server {
+    listen 80;
+    listen [::]:80 default_server ipv6only=on;
+
+    server_name 127.0.0.1:3000;
+    access_log  /var/log/nginx/localhost.access.log;
+    error_log  /var/log/nginx/localhost.error.log;
+
+    root /var/www/app/;
+
+    location / {
+        root /var/www/app/public;
+        index index.html;
+    }
+
+    location ~ ^/consulta(/|\.php)$ {
+        root /var/www/app/blacklist;
+        try_files consulta.php consulta.php?$query_string;
+    }
+
+    location /status/ {
+        root /var/www/app/blacklist;
+        try_files status.php /status.php;
+    }
+
+    location ~ incluir\.php$ {
+        root /var/www/app/blacklist;
+        try_files incluir.php /incluir.php;
+    }
+
+    location ~ remover\.php$ {
+        root /var/www/app/blacklist;
+        try_files remover.php /remover.php;
+    }
+
+    location ~ \.php$ {
+        root /var/www/app/blacklist;
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+    }
+}
