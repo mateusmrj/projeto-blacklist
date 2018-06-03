@@ -32,7 +32,7 @@ function add() {
         url: "/blacklist/incluir.php",
         data: { cpf: cpf}
     })
-    .done(function( msg ) {
+    .success(function( msg ) {
         let json_msg = JSON.parse(msg);
         if (json_msg["status"] == "error") {
             setDisabled('free');
@@ -58,7 +58,7 @@ function remove() {
         url: "/blacklist/remover.php",
         data: { cpf: cpf}
     })
-    .done(function( msg ) {
+    .success(function( msg ) {
         let json_msg = JSON.parse(msg);
         if (json_msg["status"] == "error") {
             setDisabled('free');
@@ -85,7 +85,7 @@ function check() {
             url: "/blacklist/consulta.php",
             data: { cpf: cpf}
         })
-            .done(function( msg ) {
+            .success(function( msg ) {
                 let json_msg = JSON.parse(msg);
                 if (json_msg["status"] == "error") {
                     setDisabled('free');
